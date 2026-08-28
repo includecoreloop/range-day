@@ -182,3 +182,9 @@ inventory.data     ──────> [ - ]    [ - ]    [ - ]  [{Items}]   ... 
 │ [255]= {Player Struct}│ ◄── Index 255 (Entity 255)─► │ [255]= false          │
 └───────────────────────┘                              └───────────────────────┘
 ```
+
+---
+
+### 🙏 Credits
+
+Built with [raylib](https://www.raylib.com/) by [@raysan5](https://github.com/raysan5).
