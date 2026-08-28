@@ -185,6 +185,16 @@ inventory.data     ──────> [ - ]    [ - ]    [ - ]  [{Items}]   ... 
 
 ---
 
+### 🗑️ Entity & Component Destruction
+
+Object destruction in this template is intentionally explicit and prefab-driven.
+See `obstacle_prefab_destroy` in `src/game/prefabs/obstacle_prefab.c` for the reference.
+
+Developer Memory Responsibility: <br>
+`REMOVE_COMPONENT` only sets the component's `mask.has[entity_id]` to `false`. It does not free memory. If your component holds internal heap allocations (malloc) or external resource handles (e.g., textures or sound buffers), you are responsible for freeing or unloading those resources inside your prefab's destroy function before detaching the component. Leftover `data[entity_id]` keeps the component data in memory until it is overwritten by a new entity.
+
+---
+
 ### 🙏 Credits
 
 Built with [raylib](https://www.raylib.com/) by [@raysan5](https://github.com/raysan5).
