@@ -41,6 +41,8 @@ target_sources(range-day PRIVATE
         src/components/velocity.h
         src/components/range_target.c
         src/components/range_target.h
+        src/components/particle_emitter.c
+        src/components/particle_emitter.h
 )
 
 target_sources(range-day PRIVATE
@@ -68,6 +70,8 @@ target_sources(range-day PRIVATE
         src/systems/combat_system.h
         src/systems/range_target_system.c
         src/systems/range_target_system.h
+        src/systems/particle_emitter_system.c
+        src/systems/particle_emitter_system.h
 )
 
 target_sources(range-day PRIVATE
@@ -83,6 +87,8 @@ target_sources(range-day PRIVATE
         src/game/prefabs/range_target_prefab.h
         src/game/prefabs/obstacle_prefab.c
         src/game/prefabs/obstacle_prefab.h
+        src/game/prefabs/particle_emitter_prefab.c
+        src/game/prefabs/particle_emitter_prefab.h
 )
 
 if (MSVC)

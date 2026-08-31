@@ -10,6 +10,8 @@
 #include "../physics/raycast.h"
 #include "../physics/weapon_ray.h"
 
+#include "../game/prefabs/particle_emitter_prefab.h"
+
 static void process_shot(Weapon *active_weapon) {
     if (weapon_has_ammo_in_mag(active_weapon)) {
         weapon_consume_ammo(active_weapon);
@@ -39,6 +41,8 @@ static void process_hit(const Entity shooter_e, const Transform2D *player_transf
     const RaycastHit hit = raycast_cast(ray.front, ray.dir, max_range, shooter_e);
 
     if (hit.has_hit) {
+        particle_emitter_prefab_create(hit.point, hit.normal, 0.2f);
+
         if (HAS_COMPONENT(range_target, hit.entity)) {
             RangeTarget *target = GET_COMPONENT(range_target, hit.entity);
 
