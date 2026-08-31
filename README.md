@@ -7,8 +7,11 @@ It is perfect for anyone who wants to start learning low-level game development,
 ---
 
 <p align="center">
-  <img src="https://imgtree.co/direct/7-F4ocMN.png" width="48%" />
-  <img src="https://imgtree.co/direct/OhS8A4p4.png" width="48%" />
+  <a href="https://www.youtube.com/watch?v=GScOlsD4y5U">
+    <img src="https://img.youtube.com/vi/GScOlsD4y5U/maxresdefault.jpg" alt="Watch the Overview Video" width="90%" />
+  </a>
+  <br>
+  <em>▶️ Click above to watch the full preview on YouTube</em>
 </p>
 
 ---
