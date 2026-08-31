@@ -14,6 +14,7 @@
 #include "../systems/combat_system.h"
 #include "../systems/range_target_system.h"
 #include "../systems/raylib/audio_system.h"
+#include "../systems/particle_emitter_system.h"
 #include "demo.h"
 #include "scene.h"
 
@@ -27,6 +28,7 @@ static void tick(const double dt) {
     collision_system_update();
     rotation_system_update();
     range_target_system_update((float) dt);
+    particle_emitter_system_update((float) dt);
     scene_update();
     camera_system_update();
 }

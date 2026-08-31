@@ -13,6 +13,7 @@
 #include "../../components/size.h"
 #include "../../components/collider.h"
 #include "../../components/range_target.h"
+#include "../../components/particle_emitter.h"
 #include "../../game/scene.h"
 
 #include "../../physics/raycast.h"
@@ -451,6 +452,20 @@ static void render_ui() {
     DrawText(rifle_str, x_pos, y_pos, UI_TUTORIAL_FONT_SIZE, SKYBLUE);
 }
 
+static void draw_particle_emitter(const ParticleEmitter *emitter) {
+    for (int i = 0; i < emitter->count; i++) {
+        const Particle *p = &emitter->particles[i];
+
+        if (p->lifetime >= p->max_lifetime) continue;
+
+        const float alpha_factor = 1.0f - p->lifetime / p->max_lifetime;
+
+        Color particle_color = GetColor(p->rgba);
+        particle_color.a = (unsigned char) (particle_color.a * alpha_factor);
+        DrawCircleV((Vector2){.x = p->position.x, .y = p->position.y}, p->size, particle_color);
+    }
+}
+
 void render_system_update(void) {
     BeginDrawing();
     ClearBackground(BLACK);
@@ -479,6 +494,11 @@ void render_system_update(void) {
 
                 draw_rounded_vector_rectangle(entity_pos, width, height, t->rotation, corner_radius, color, RAYWHITE);
             }
+        }
+
+        if (HAS_COMPONENT(particle_emitter, i)) {
+            const ParticleEmitter *emitter = GET_COMPONENT(particle_emitter, i);
+            draw_particle_emitter(emitter);
         }
     }
 
