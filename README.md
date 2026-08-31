@@ -1,6 +1,6 @@
 # 🎯 range-day
 
-**range-day** is a lightweight, cache-friendly 2D top-down shooter template.
+**range-day** is a lightweight 2D top-down shooter template.
 
 It is perfect for anyone who wants to start learning low-level game development, or anyone who needs a base template to build a 2D top-down shooter.
 
