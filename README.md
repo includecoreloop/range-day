@@ -28,6 +28,9 @@ It is perfect for anyone who wants to start learning low-level game development,
 * **Single Binary Output:** Compiles directly into a single executable for easy distribution.
 * **Free & Open:** Completely free to use and modify for any project.
 
+#### 📦 v1.0.3
+* **Particles:** A simple particle emitter system to visualize bullet impacts.
+
 ---
 
 ### 📌 Developer Notes
