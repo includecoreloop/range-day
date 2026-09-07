@@ -1,6 +1,7 @@
 #include "render_system.h"
 #include "raylib.h"
 #include "raymath.h"
+#include "rlgl.h"
 #include <math.h>
 
 #include "../../core/config.h"
@@ -37,82 +38,50 @@ transform_local_to_world(const Vector2 local_pos, const Vector2 origin, const fl
     return Vector2Add(origin, Vector2Rotate(local_pos, rotation_deg * DEG2RAD));
 }
 
-static void draw_vector_shape(const Vector2 center_pos, const float width, const float height, const float rotation,
-                              const int sides, const Color fill_color, const Color outline_color) {
-    Vector2 points[32];
-    const float rx = width * 0.5f;
-    const float ry = height * 0.5f;
+static void draw_vector_shape(const Vector2 center_pos, const float width, const float height,
+                              const float rotation_deg, const int sides,
+                              const Color fill_color, const Color outline_color) {
+    const float radius = (width < height ? width : height) * 0.5f;
 
-    const float angle_offset = (sides == 4) ? (PI / 4.0f) : 0.0f;
-    const float radius_scale = (sides == 4) ? SQRT2 : 1.0f;
+    rlPushMatrix();
 
-    for (int i = 0; i < sides; i++) {
-        const float angle = (float) i / sides * (2.0f * PI) + angle_offset;
+    rlTranslatef(center_pos.x, center_pos.y, 0.0f);
+    rlRotatef(rotation_deg, 0.0f, 0.0f, 1.0f);
 
-        const Vector2 local_pt = {
-            .x = cosf(angle) * rx * radius_scale,
-            .y = sinf(angle) * ry * radius_scale
-        };
+    DrawPoly((Vector2){.x = 0, .y = 0}, sides, radius, 0.0f, fill_color);
 
-        points[i] = transform_local_to_world(local_pt, center_pos, rotation);
+    if (DEFAULT_OUTLINE_THICKNESS > 0.0f) {
+        DrawPolyLinesEx((Vector2){.x = 0, .y = 0}, sides, radius, 0.0f, DEFAULT_OUTLINE_THICKNESS, outline_color);
     }
 
-    for (int i = 0; i < sides; i++) {
-        const Vector2 p1 = points[i];
-        const Vector2 p2 = points[(i + 1) % sides];
-        DrawTriangle(center_pos, p2, p1, fill_color);
-        DrawLineEx(p1, p2, DEFAULT_OUTLINE_THICKNESS, outline_color);
-    }
+    rlPopMatrix();
 }
 
 static void draw_rounded_vector_rectangle(const Vector2 center_pos, const float width, const float height,
-                                          const float rotation, float corner_radius, const Color fill_color,
-                                          const Color outline_color) {
-#define CORNER_SEGMENTS 8
-#define TOTAL_VERTICES (CORNER_SEGMENTS * 4)
+                                          const float rotation_deg, float corner_radius,
+                                          const Color fill_color, const Color outline_color) {
+    const float min_dim = width < height ? width : height;
 
-    Vector2 points[TOTAL_VERTICES];
-
-    const float half_w = width * 0.5f;
-    const float half_h = height * 0.5f;
-
-    const float max_r = half_w < half_h ? half_w : half_h;
-
-    if (corner_radius > max_r) corner_radius = max_r;
-
-    const Vector2 corner_centers[4] = {
-        {.x = half_w - corner_radius, .y = half_h - corner_radius},
-        {.x = -half_w + corner_radius, .y = half_h - corner_radius},
-        {.x = -half_w + corner_radius, .y = -half_h + corner_radius},
-        {.x = half_w - corner_radius, .y = -half_h + corner_radius}
-    };
-
-    int vertex_index = 0;
-
-    for (int c = 0; c < 4; c++) {
-        const float start_angle = c * (PI / 2.0f);
-
-        for (int i = 0; i < CORNER_SEGMENTS; i++) {
-            const float angle = start_angle + ((float) i / CORNER_SEGMENTS) * (PI / 2.0f);
-
-            const Vector2 local_pt = {
-                .x = corner_centers[c].x + cosf(angle) * corner_radius,
-                .y = corner_centers[c].y + sinf(angle) * corner_radius
-            };
-
-            points[vertex_index++] = transform_local_to_world(local_pt, center_pos, rotation);
-        }
+    if (corner_radius > min_dim * 0.5f) {
+        corner_radius = min_dim * 0.5f;
     }
 
-    for (int i = 0; i < TOTAL_VERTICES; i++) {
-        const Vector2 p1 = points[i];
-        const Vector2 p2 = points[(i + 1) % TOTAL_VERTICES];
-        DrawTriangle(center_pos, p2, p1, fill_color);
-        DrawLineEx(p1, p2, DEFAULT_OUTLINE_THICKNESS, outline_color);
+    const float roundness = min_dim > 0.0f ? corner_radius * 2.0f / min_dim : 0.0f;
+
+    const Rectangle rec = {.x = -width * 0.5f, .y = -height * 0.5f, .width = width, .height = height};
+
+    rlPushMatrix();
+
+    rlTranslatef(center_pos.x, center_pos.y, 0.0f);
+    rlRotatef(rotation_deg, 0.0f, 0.0f, 1.0f);
+
+    DrawRectangleRounded(rec, roundness, 8, fill_color);
+
+    if (DEFAULT_OUTLINE_THICKNESS > 0.0f) {
+        DrawRectangleRoundedLinesEx(rec, roundness, 8, DEFAULT_OUTLINE_THICKNESS, outline_color);
     }
 
-#undef CORNER_SEGMENTS
-#undef TOTAL_VERTICES
+    rlPopMatrix();
 }
 
 static void draw_humanoid_normal_stance(const Vector2 pos, const Transform2D *t, const HumanoidRender *hr,
