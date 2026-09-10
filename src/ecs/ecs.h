@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define MAX_ENTITIES 256
 typedef uint32_t Entity;
@@ -24,6 +25,9 @@ extern Name##Store Name
 Name##Store Name = {0}
 
 #define ADD_COMPONENT(Store, e, v) do { Store.data[e] = v; Store.mask.has[e] = true; } while(0)
-#define REMOVE_COMPONENT(Store, e) (Store.mask.has[e] = false)
+#define REMOVE_COMPONENT(Store, e) do { \
+    Store.mask.has[e] = false; \
+    memset(&Store.data[e], 0, sizeof(Store.data[e])); \
+} while(0)
 #define HAS_COMPONENT(Store, e) (Store.mask.has[e])
 #define GET_COMPONENT(Store, e) (&Store.data[e])

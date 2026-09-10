@@ -167,3 +167,17 @@ Entity player_prefab_create(void) {
 
     return player_entity;
 }
+
+void player_prefab_destroy(const Entity entity) {
+    REMOVE_COMPONENT(transform, entity);
+    REMOVE_COMPONENT(render, entity);
+    REMOVE_COMPONENT(size, entity);
+    REMOVE_COMPONENT(humanoid_render, entity);
+    REMOVE_COMPONENT(velocity, entity);
+    REMOVE_COMPONENT(collider, entity);
+    REMOVE_COMPONENT(player, entity);
+    REMOVE_COMPONENT(orientation_intent, entity);
+    REMOVE_COMPONENT(inventory, entity);
+
+    destroy_entity(entity);
+}
