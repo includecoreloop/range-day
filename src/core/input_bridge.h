@@ -10,6 +10,7 @@ typedef struct {
     bool move_right;
 
     bool action_pause;
+    bool action_level_restart;
 
     Vec2 mouse_position;
 
