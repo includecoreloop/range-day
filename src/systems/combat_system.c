@@ -13,19 +13,17 @@
 #include "../game/prefabs/particle_emitter_prefab.h"
 
 static void process_shot(Weapon *active_weapon) {
-    if (weapon_has_ammo_in_mag(active_weapon)) {
-        weapon_consume_ammo(active_weapon);
+    weapon_consume_ammo(active_weapon);
 
-        active_weapon->render.muzzle_flash_timer = active_weapon->render.muzzle_flash_duration;
-        active_weapon->render.recoil_timer = active_weapon->render.recoil_duration;
+    active_weapon->render.muzzle_flash_timer = active_weapon->render.muzzle_flash_duration;
+    active_weapon->render.recoil_timer = active_weapon->render.recoil_duration;
 
-        if (active_weapon->type == WEAPON_PISTOL) {
-            audio_bridge.pistol_shot = true;
-        }
+    if (active_weapon->type == WEAPON_PISTOL) {
+        audio_bridge.pistol_shot = true;
+    }
 
-        if (active_weapon->type == WEAPON_RIFLE) {
-            audio_bridge.rifle_shot = true;
-        }
+    if (active_weapon->type == WEAPON_RIFLE) {
+        audio_bridge.rifle_shot = true;
     }
 }
 
@@ -68,12 +66,17 @@ static void init_reload(Player *p, Weapon *active_weapon) {
     }
 }
 
+static bool can_shoot(const Player *p, const Weapon *active_weapon) {
+    return p->stance_state == PLAYER_STANCE_AIMING && p->action_state == PLAYER_ACTION_DEFAULT &&
+           weapon_has_ammo_in_mag(active_weapon);
+}
+
 static void process_combat_actions(const float dt, const Entity p_e, Player *p, Inventory *inv,
                                    const Transform2D *player_transform, const Size2D *player_size) {
     Weapon *active_weapon = inventory_get_active_weapon(inv);
 
     if (p->process_shot) {
-        if (p->stance_state == PLAYER_STANCE_AIMING && p->action_state == PLAYER_ACTION_DEFAULT) {
+        if (can_shoot(p, active_weapon)) {
             process_shot(active_weapon);
             process_hit(p_e, player_transform, player_size, active_weapon);
         }
