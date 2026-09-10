@@ -47,3 +47,12 @@ Entity range_target_prefab_create(const Vec2 position, const Size2D target_size,
 
     return rt;
 }
+
+void range_target_prefab_destroy(const Entity entity) {
+    REMOVE_COMPONENT(transform, entity);
+    REMOVE_COMPONENT(render, entity);
+    REMOVE_COMPONENT(size, entity);
+    REMOVE_COMPONENT(collider, entity);
+    REMOVE_COMPONENT(range_target, entity);
+    destroy_entity(entity);
+}

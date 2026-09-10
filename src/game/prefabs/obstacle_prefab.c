@@ -36,10 +36,10 @@ Entity obstacle_prefab_create(const Vec2 position, const Size2D obstacle_size) {
     return obstacle;
 }
 
-void obstacle_prefab_destroy(const Entity obstacle) {
-    REMOVE_COMPONENT(transform, obstacle);
-    REMOVE_COMPONENT(render, obstacle);
-    REMOVE_COMPONENT(size, obstacle);
-    REMOVE_COMPONENT(collider, obstacle);
-    destroy_entity(obstacle);
+void obstacle_prefab_destroy(const Entity entity) {
+    REMOVE_COMPONENT(transform, entity);
+    REMOVE_COMPONENT(render, entity);
+    REMOVE_COMPONENT(size, entity);
+    REMOVE_COMPONENT(collider, entity);
+    destroy_entity(entity);
 }
