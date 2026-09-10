@@ -92,3 +92,18 @@ void scene_init(void) {
 
 void scene_update(void) {
 }
+
+void scene_destroy(void) {
+    player_prefab_destroy(player_entity);
+
+    for (int i = 0; i < MAX_ENTITIES; ++i) {
+        if (HAS_COMPONENT(range_target, i)) {
+            range_target_prefab_destroy(i);
+        } else if (HAS_COMPONENT(transform, i)) {
+            obstacle_prefab_destroy(i);
+        }
+    }
+
+    player_entity = 0;
+    game_camera = (Camera2D){0};
+}

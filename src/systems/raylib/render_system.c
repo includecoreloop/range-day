@@ -389,7 +389,7 @@ static void render_ui() {
              UI_MARGIN_X, SCREEN_HEIGHT - UI_LINE_HEIGHT, UI_FONT_SIZE, reserve_color);
 
     static const char *STANDARD_CONTROLS[] = {
-        "WASD: MOVE",
+        "WASD : MOVE",
         "L SHIFT : SPRINT",
         "RIGHT MOUSE : AIM",
         "LEFT MOUSE : FIRE",
@@ -419,6 +419,13 @@ static void render_ui() {
     y_pos = UI_MARGIN_X + (standard_count + 1) * UI_LINE_HEIGHT;
 
     DrawText(rifle_str, x_pos, y_pos, UI_TUTORIAL_FONT_SIZE, SKYBLUE);
+
+    const char *restart_str = "P : RESTART LEVEL";
+    text_width = MeasureText(restart_str, UI_TUTORIAL_FONT_SIZE);
+    x_pos = SCREEN_WIDTH - UI_MARGIN_X - text_width;
+    y_pos = UI_MARGIN_X + (standard_count + 2) * UI_LINE_HEIGHT;
+
+    DrawText(restart_str, x_pos, y_pos, UI_TUTORIAL_FONT_SIZE, LIGHTGRAY);
 }
 
 static void draw_particle_emitter(const ParticleEmitter *emitter) {

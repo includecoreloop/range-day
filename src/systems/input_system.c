@@ -16,6 +16,13 @@ static void player_cancel_reload(Player *p, Inventory *inv) {
 }
 
 void input_system_update(void) {
+    if (input_bridge.action_level_restart) {
+        scene_destroy();
+        scene_init();
+        input_bridge_consume_action(&input_bridge.action_level_restart);
+        return;
+    }
+
     Player *p = GET_COMPONENT(player, player_entity);
     Velocity *v = GET_COMPONENT(velocity, player_entity);
     OrientationIntent *oi = GET_COMPONENT(orientation_intent, player_entity);

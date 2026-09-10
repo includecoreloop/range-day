@@ -11,6 +11,7 @@ void input_system_poll(void) {
     input_bridge.move_right = IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT);
 
     input_bridge.action_pause |= IsKeyPressed(KEY_ESCAPE);
+    input_bridge.action_level_restart |= IsKeyPressed(KEY_P);
 
     input_bridge.action_aim = IsMouseButtonDown(MOUSE_BUTTON_RIGHT);
     input_bridge.action_shoot |= IsMouseButtonPressed(MOUSE_BUTTON_LEFT);

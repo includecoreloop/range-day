@@ -9,3 +9,5 @@ extern Camera2D game_camera;
 void scene_init(void);
 
 void scene_update(void);
+
+void scene_destroy(void);
