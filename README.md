@@ -6,13 +6,10 @@ It is perfect for anyone who wants to start learning low-level game development,
 
 ---
 
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=GScOlsD4y5U">
-    <img src="https://img.youtube.com/vi/GScOlsD4y5U/maxresdefault.jpg" alt="Watch the Overview Video" width="90%" />
-  </a>
-  <br>
-  <em>▶️ Click above to watch the full preview on YouTube</em>
-</p>
+| 🎬 **v1.0.0 Overview** | 🚀 **v1.0.5 Update (Pickups & Triggers)** |
+| :---: | :---: |
+| [<img src="https://img.youtube.com/vi/GScOlsD4y5U/maxresdefault.jpg" width="100%">](https://www.youtube.com/watch?v=GScOlsD4y5U) | [<img src="https://img.youtube.com/vi/0IoHStHbH_o/maxresdefault.jpg" width="100%">](https://www.youtube.com/watch?v=0IoHStHbH_o) |
+| *▶️ Watch Template Walkthrough* | *▶️ Watch Patch Preview* |
 
 ---
 
@@ -31,6 +28,9 @@ It is perfect for anyone who wants to start learning low-level game development,
 #### 📦 v1.0.3
 * **Particles:** A simple particle emitter system to visualize bullet impacts.
 
+#### 📦 v1.0.5
+* **Pickup System:** Added ammo pickups that replenish reserve ammunition upon contact.
+* **Collision Triggers:** Integrated overlap trigger detection into the collision system, allowing entities to register contacts without triggering physics response or positional pushback.
 ---
 
 ### 📌 Developer Notes
@@ -42,9 +42,16 @@ It is perfect for anyone who wants to start learning low-level game development,
 * **Central Configuration:** Use `src/core/config.h` for global constants and game parameters.
 * **Fixed Timestep:** This template uses a fixed timestep accumulator loop in `src/game/main.c` to provide smooth, frame-independent physics and logic updates.
 * **Debug Rendering:** Set `RENDER_COLLIDERS` to `1` in your configuration to draw collider bounds.
-* **Scene Management:** Use `src/game/scene.c` to manage entity creation and lifespan for a given scene.
+* **Scene Entities:** Use `src/game/scene.c` to manage entity creation and lifespan for a given scene.
 * **Prefab Builders:** Use helper functions inside `src/game/prefabs/` to compose entities (see `player_prefab.c` for reference).
-* **Zero Asset Pipeline**: Audio and textures are fully generated via code at startup—no external files to load or pack.
+* **Trigger Colliders:** Set `is_trigger = true` in an entity's `Collider2D` component to detect overlaps without physics blocking (see `src/game/prefabs/pickup_ammo_prefab.c`).
+* **Single-Trigger Rule:** Only one entity in a collision pair should be a trigger (e.g., the pickup is a trigger, the player is not). If both colliders have `is_trigger = true`, the interaction is skipped.
+* **Collider Interaction Rules:**
+  * **Trigger + Non-Trigger:** Registers overlap in `trigger_contacts` (no physical pushback).
+  * **Trigger + Trigger:** Ignored.
+  * **Static + Static:** Ignored.
+* **Processing Contact Events:** Create a dedicated system (e.g., `src/systems/pickup_system.c`) to read `trigger_contacts` and apply your gameplay logic to contacting entities.
+* **Particle Effects:** Instantiate impact effects using `particle_emitter_prefab_create(point, normal, lifetime)`. The `particle_emitter_system` automatically updates particle physics and cleans up the entity once all particles expire (see `src/game/prefabs/particle_emitter_prefab.c`).
 
 ---
 

@@ -15,6 +15,7 @@
 #include "../../components/collider.h"
 #include "../../components/range_target.h"
 #include "../../components/particle_emitter.h"
+#include "../../components/pickup_ammo.h"
 #include "../../game/scene.h"
 
 #include "../../physics/raycast.h"
@@ -442,6 +443,83 @@ static void draw_particle_emitter(const ParticleEmitter *emitter) {
     }
 }
 
+static void draw_ammo_pickup(const PickupAmmo *pa, const Vector2 pos, const Transform2D *t, const Size2D *s) {
+    const float width = s->width * t->scale.x;
+    const float height = s->height * t->scale.y;
+    const float corner_radius = (width < height ? width : height) * DEFAULT_CORNER_RADIUS_RATIO;
+
+    Color outline_color = RAYWHITE;
+
+    switch (pa->weapon_type) {
+        case WEAPON_PISTOL:
+            outline_color = MAGENTA;
+            break;
+        case WEAPON_RIFLE:
+            outline_color = SKYBLUE;
+            break;
+        default:
+            outline_color = LIME;
+            break;
+    }
+
+    draw_rounded_vector_rectangle(pos, width, height, t->rotation, corner_radius, BLACK, outline_color);
+
+    const float rad = t->rotation * DEG2RAD;
+    const float cos_r = cosf(rad);
+    const float sin_r = sinf(rad);
+
+    #define ROTATE_PT(lx, ly) (Vector2){ \
+        pos.x + ((lx) * cos_r - (ly) * sin_r), \
+        pos.y + ((lx) * sin_r + (ly) * cos_r) \
+    }
+
+    const float thick = 2.0f;
+
+    if (pa->weapon_type == WEAPON_PISTOL) {
+        const float bw = width * 0.25f;
+        const float bh = height * 0.35f;
+
+        const Vector2 tip   = ROTATE_PT(0.0f, -bh);
+        const Vector2 r_top = ROTATE_PT(bw, -bh * 0.3f);
+        const Vector2 l_top = ROTATE_PT(-bw, -bh * 0.3f);
+        const Vector2 r_bot = ROTATE_PT(bw, bh);
+        const Vector2 l_bot = ROTATE_PT(-bw, bh);
+
+        DrawLineEx(l_top, tip, thick, outline_color);
+        DrawLineEx(tip, r_top, thick, outline_color);
+        DrawLineEx(r_top, r_bot, thick, outline_color);
+        DrawLineEx(r_bot, l_bot, thick, outline_color);
+        DrawLineEx(l_bot, l_top, thick, outline_color);
+
+        const Vector2 rim_l = ROTATE_PT(-bw * 1.2f, bh * 0.6f);
+        const Vector2 rim_r = ROTATE_PT(bw * 1.2f, bh * 0.6f);
+        DrawLineEx(rim_l, rim_r, thick, outline_color);
+
+    } else {
+        const float spacing = width * 0.22f;
+        const float bw = width * 0.15f;
+        const float bh = height * 0.40f;
+
+        for (int i = -1; i <= 1; i += 2) {
+            const float ox = i * spacing;
+
+            const Vector2 tip   = ROTATE_PT(ox, -bh);
+            const Vector2 r_top = ROTATE_PT(ox + bw, -bh * 0.2f);
+            const Vector2 l_top = ROTATE_PT(ox - bw, -bh * 0.2f);
+            const Vector2 r_bot = ROTATE_PT(ox + bw, bh);
+            const Vector2 l_bot = ROTATE_PT(ox - bw, bh);
+
+            DrawLineEx(l_top, tip, thick, outline_color);
+            DrawLineEx(tip, r_top, thick, outline_color);
+            DrawLineEx(r_top, r_bot, thick, outline_color);
+            DrawLineEx(r_bot, l_bot, thick, outline_color);
+            DrawLineEx(l_bot, l_top, thick, outline_color);
+        }
+    }
+
+    #undef ROTATE_PT
+}
+
 void render_system_update(void) {
     BeginDrawing();
     ClearBackground(BLACK);
@@ -463,6 +541,9 @@ void render_system_update(void) {
             } else if (HAS_COMPONENT(range_target, i)) {
                 const RangeTarget *rt = GET_COMPONENT(range_target, i);
                 draw_range_target(rt, entity_pos, t, s, color);
+            } else if (HAS_COMPONENT(pickup_ammo, i)) {
+                const PickupAmmo *pa = GET_COMPONENT(pickup_ammo, i);
+                draw_ammo_pickup(pa, entity_pos, t, s);
             } else {
                 const float width = s->width * t->scale.x;
                 const float height = s->height * t->scale.y;
