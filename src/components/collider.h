@@ -28,6 +28,14 @@ typedef struct {
     int circle_count;
 
     bool is_active;
+
+    Entity triggered_entities[MAX_TRIGGER_CONTACTS];
+    int trigger_contact_count;
 } Collider2D;
 
 COMPONENT_DEFINE(Collider2D, collider);
+
+static void collider_add_trigger_contact(Collider2D *col, const Entity other_entity) {
+    col->triggered_entities[col->trigger_contact_count] = other_entity;
+    col->trigger_contact_count++;
+}

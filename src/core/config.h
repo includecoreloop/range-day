@@ -5,7 +5,7 @@
 #define SCREEN_CENTER_X     (SCREEN_WIDTH  * 0.5f)
 #define SCREEN_CENTER_Y     (SCREEN_HEIGHT * 0.5f)
 
-#define WINDOW_TITLE        "Game Core Loop"
+#define WINDOW_TITLE        "Range Day"
 #define TARGET_FPS          120
 
 #define TARGET_TPS          120.0
@@ -17,3 +17,4 @@
 #define RENDER_FPS_COUNTER  1
 
 #define MAX_COLLIDER_CIRCLES 5
+#define MAX_TRIGGER_CONTACTS 8

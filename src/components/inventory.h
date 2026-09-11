@@ -5,6 +5,7 @@
 typedef enum {
     WEAPON_PISTOL,
     WEAPON_RIFLE,
+    WEAPON_COUNT,
 } WeaponType;
 
 typedef struct {
@@ -35,7 +36,7 @@ typedef struct {
 } Weapon;
 
 typedef struct {
-    Weapon weapons[3];
+    Weapon weapons[WEAPON_COUNT];
     int active_index;
 } Inventory;
 
@@ -77,4 +78,22 @@ static inline void weapon_reset(Weapon *w) {
     w->render.muzzle_flash_timer = 0.0f;
     w->render.recoil_timer = 0.0f;
     weapon_reset_reload_timer(w);
+}
+
+static inline void weapon_add_reserve_ammo(Weapon *w, const int count) {
+    w->reserve_ammo += count;
+
+    if (w->reserve_ammo > w->max_reserve_ammo) {
+        w->reserve_ammo = w->max_reserve_ammo;
+    }
+}
+
+static inline Weapon *get_weapon_by_type(Inventory *inv, WeaponType type) {
+    for (int i = 0; i < WEAPON_COUNT; ++i) {
+        if (inv->weapons[i].type == type) {
+            return &inv->weapons[i];
+        }
+    }
+
+    return NULL;
 }

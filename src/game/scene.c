@@ -7,6 +7,7 @@
 #include "prefabs/player_prefab.h"
 #include "prefabs/range_target_prefab.h"
 #include "prefabs/obstacle_prefab.h"
+#include "prefabs/pickup_ammo_prefab.h"
 
 Entity player_entity = 0;
 Camera2D game_camera = {0};
@@ -88,6 +89,11 @@ void scene_init(void) {
     obstacle_prefab_create((Vec2){.x = 800.0f, .y = 300.0f}, (Size2D){.width = 30.0f, .height = 100.0f});
     obstacle_prefab_create((Vec2){.x = 1000.0f, .y = 500.0f}, (Size2D){.width = 30.0f, .height = 100.0f});
     obstacle_prefab_create((Vec2){.x = 1000.0f, .y = 700.0f}, (Size2D){.width = 300.0f, .height = 30.0f});
+
+    pickup_ammo_prefab_create((Vec2){.x = 450.0f, .y = 700.0f}, WEAPON_PISTOL, 12);
+    pickup_ammo_prefab_create((Vec2){.x = 550.0f, .y = 400.0f}, WEAPON_RIFLE, 25);
+    pickup_ammo_prefab_create((Vec2){.x = 650.0f, .y = 100.0f}, WEAPON_PISTOL, 12);
+    pickup_ammo_prefab_create((Vec2){.x = 450.0f, .y = -100.0f}, WEAPON_RIFLE, 25);
 }
 
 void scene_update(void) {

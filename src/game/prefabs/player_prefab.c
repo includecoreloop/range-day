@@ -122,7 +122,7 @@ Entity player_prefab_create(void) {
         .fire_rate = 0.25f,
         .ammo_in_mag = 12,
         .mag_size = 12,
-        .reserve_ammo = 24,
+        .reserve_ammo = 0,
         .max_reserve_ammo = 24,
         .render = {
             .width_ratio = 0.20f,
@@ -144,7 +144,7 @@ Entity player_prefab_create(void) {
         .fire_rate = 0.1f,
         .ammo_in_mag = 25,
         .mag_size = 25,
-        .reserve_ammo = 50,
+        .reserve_ammo = 0,
         .max_reserve_ammo = 50,
         .render = {
             .width_ratio = 0.20f,
