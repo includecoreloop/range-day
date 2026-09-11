@@ -6,7 +6,7 @@ It is perfect for anyone who wants to start learning low-level game development,
 
 ---
 
-| 🎬 **v1.0.0 Overview** | 🚀 **v1.0.5 Update (Pickups & Triggers)** |
+| 🎬 **v1.0.0 Overview** | 🚀 **v1.0.3 and v1.0.5 (Pickups, Triggers and Particles)** |
 | :---: | :---: |
 | [<img src="https://img.youtube.com/vi/GScOlsD4y5U/maxresdefault.jpg" width="100%">](https://www.youtube.com/watch?v=GScOlsD4y5U) | [<img src="https://img.youtube.com/vi/0IoHStHbH_o/maxresdefault.jpg" width="100%">](https://www.youtube.com/watch?v=0IoHStHbH_o) |
 | *▶️ Watch Template Walkthrough* | *▶️ Watch Patch Preview* |
