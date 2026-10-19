@@ -1,15 +1,13 @@
 # 🎯 range-day
 
-**range-day** is a lightweight 2D top-down shooter template.
-
-It is perfect for anyone who wants to start learning low-level game development, or anyone who needs a base template to build a 2D top-down shooter.
+**range-day** is a 2D top-down shooter demo.
 
 ---
 
 | 🎬 **v1.0.0 Overview** | 🚀 **v1.0.3 and v1.0.5 (Pickups, Triggers and Particles)** |
 | :---: | :---: |
 | [<img src="https://img.youtube.com/vi/GScOlsD4y5U/maxresdefault.jpg" width="100%">](https://www.youtube.com/watch?v=GScOlsD4y5U) | [<img src="https://img.youtube.com/vi/0IoHStHbH_o/maxresdefault.jpg" width="100%">](https://www.youtube.com/watch?v=0IoHStHbH_o) |
-| *▶️ Watch Template Walkthrough* | *▶️ Watch Patch Preview* |
+| *▶️ Watch Demo Preview* | *▶️ Watch Patch Preview* |
 
 ---
 
@@ -18,7 +16,7 @@ It is perfect for anyone who wants to start learning low-level game development,
 * **Tech Stack:** Built with C17 and Raylib.
 * **Cache-Friendly Architecture:** Custom macro-based ECS using parallel component arrays with $O(1)$ component access.
 * **Decoupled Design:** Rendering and input systems are completely separated from core gameplay logic.
-* **Zero Assets:** 100% procedural vector graphics and generated audio—no external asset files required.
+* **Zero Assets:** 100% procedural vector graphics. No external asset files required.
 * **Ready-to-Use Components:** Built-in transform, collider, render, player, and weapon components.
 * **Cross-Platform & Toolchain Ready:** Automatic compiler detection for MinGW and MSVC (Windows) and macOS. Works out
   of the box in CLion and Visual Studio.
@@ -157,8 +155,10 @@ REMOVE_COMPONENT(player, p_entity);
 
 
 * **Removal (`REMOVE_COMPONENT`):**
-  * Macro expands to: `(player.mask.has[0] = false)`
-  * Flips the active flag to `false`. Old data remains in memory at index `0`, but systems ignore it because the mask check fails.
+  * Macro expands to:
+    * `player.mask.has[0] = false`
+    * `memset(&player.data[0], 0, sizeof(player.data[0]));`
+  * Flips the `has` flag to `false`. Clears `data`.
 
 ---
 
@@ -204,7 +204,8 @@ Object destruction in this template is intentionally explicit and prefab-driven.
 See `obstacle_prefab_destroy` in `src/game/prefabs/obstacle_prefab.c` for the reference.
 
 Developer Memory Responsibility: <br>
-`REMOVE_COMPONENT` only sets the component's `mask.has[entity_id]` to `false`. It does not free memory. If your component holds internal heap allocations (malloc) or external resource handles (e.g., textures or sound buffers), you are responsible for freeing or unloading those resources inside your prefab's destroy function before detaching the component. Leftover `data[entity_id]` keeps the component data in memory until it is overwritten by a new entity.
+`REMOVE_COMPONENT` sets the component's `mask.has[entity_id]` to `false` and zeroes out the component's data slot using `memset(&Store.data[entity_id], 0, sizeof(Store.data[entity_id]))`. <br> 
+While this automatically clears stale component data from the store, it does not manage external resources. If your component holds internal heap allocations (malloc) or external resource handles (e.g., Raylib textures or sound buffers), you are still responsible for freeing or unloading those resources inside your prefab's destroy function before detaching the component.
 
 ---
 
